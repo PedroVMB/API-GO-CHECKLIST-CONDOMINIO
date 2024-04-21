@@ -22,5 +22,12 @@ func HandleRequests() {
 	r.DELETE("/sindicos/:id", controllers.DeleteSindico)
 	r.PATCH("/sindicos/:id", controllers.UpdateSindico)
 
+	//Condominio routes
+	r.GET("/condominios", controllers.GetAllCondominios)
+	r.GET("/condominios/:id", controllers.GetCondominioById)
+	r.POST("/condominios", controllers.CreateCondominio)
+	r.DELETE("/condominios/:id", controllers.DeleteCondominio)
+	r.PATCH("/condominios/:id", controllers.UpdateCondominio)
+
 	r.Run(":5000")
 }
