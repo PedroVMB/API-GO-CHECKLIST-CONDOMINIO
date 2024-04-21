@@ -14,8 +14,13 @@ func HandleRequests() {
 	r.DELETE("/administradores/:id", controllers.DeleteAdm)
 	r.PATCH("/administradores/:id", controllers.UpdateAdm)
 	// r.GET("/administradores/inativos", controllers.GetAdmByInativeStatus)
-	
+
 	//Sindico routes
+	r.GET("/sindicos", controllers.GetAllSindico)
+	r.GET("/sindicos/:id", controllers.GetSindicoById)
+	r.POST("/sindicos", controllers.CreateSindico)
+	r.DELETE("/sindicos/:id", controllers.DeleteSindico)
+	r.PATCH("/sindicos/:id", controllers.UpdateSindico)
 
 	r.Run(":5000")
 }
