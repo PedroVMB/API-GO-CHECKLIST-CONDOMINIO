@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 func HandleRequests() {
 	r := gin.Default()
 	///Administrador routes
@@ -14,8 +13,9 @@ func HandleRequests() {
 	r.POST("/administradores", controllers.CreateAdm)
 	r.DELETE("/administradores/:id", controllers.DeleteAdm)
 	r.PATCH("/administradores/:id", controllers.UpdateAdm)
-
+	// r.GET("/administradores/inativos", controllers.GetAdmByInativeStatus)
+	
 	//Sindico routes
 
-	r.Run(":8000")
+	r.Run(":5000")
 }

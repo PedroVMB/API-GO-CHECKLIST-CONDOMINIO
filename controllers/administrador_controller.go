@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/PedroVMB/API-GO-CHECKLIST-CONDOMINIO/database"
@@ -8,19 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllAdm(c *gin.Context){
-	var adms []models.Administrador
-	database.DB.Find(&adms)
-	c.JSON(200, adms)
+func GetAllAdm(c *gin.Context) {
+    var adms []models.Administrador
+    database.DB.Raw("SELECT name, email, cpf from administradors WHERE deleted_at IS NULL").Find(&adms)
+    c.JSON(http.StatusOK, adms)
 }
 
 // func GetAdmByInativeStatus(c *gin.Context){
 // 	var adms []models.Administrador
-// 	database.DB.Raw("SELECT * from administradores WHERE ").Find(&adms)
+// 	database.DB.Raw("SELECT * from administradors WHERE deleted_at != null").Find(&adms)
 // 	c.JSON(http.StatusOK, adms)
 // }
 
-func GetAdmById(c *gin.Context){
+func GetAdmById(c *gin.Context) {
 	var adm models.Administrador
 	id := c.Params.ByName("id")
 	database.DB.First(&adm, id)
@@ -33,24 +34,27 @@ func GetAdmById(c *gin.Context){
 	c.JSON(http.StatusOK, adm)
 }
 
-func CreateAdm(c *gin.Context){
-	var adm models.Administrador
-	if err := c.ShouldBindJSON(&adm); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"erro": err.Error()})
-			return
-	}
-	if err := models.ValidatesDataAdm(&adm); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"erro": err.Error()})
-		return
-	}
+func CreateAdm(c *gin.Context) {
+    var adm models.Administrador
+    if err := c.ShouldBindJSON(&adm); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "erro": err.Error()})
+        return
+    }
+    if err := models.ValidatesDataAdm(&adm); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "erro": err.Error()})
+        return
+    }
 
-	database.DB.Create(&adm)
-	c.JSON(http.StatusOK, adm)
+    fmt.Println("Antes de criar o administrador")
+    database.DB.Create(&adm)
+    fmt.Println("Depois de criar o administrador")
+    c.JSON(http.StatusOK, adm)
 }
 
-func UpdateAdm(c *gin.Context){
+
+func UpdateAdm(c *gin.Context) {
 	var adm models.Administrador
 	id := c.Params.ByName("id")
 	database.DB.First(&adm, id)
@@ -70,7 +74,7 @@ func UpdateAdm(c *gin.Context){
 
 }
 
-func DeleteAdm(c *gin.Context){
+func DeleteAdm(c *gin.Context) {
 	var adm models.Administrador
 	id := c.Params.ByName("id")
 	database.DB.Delete(&adm, id)
