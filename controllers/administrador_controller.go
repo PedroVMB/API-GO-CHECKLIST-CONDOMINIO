@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/PedroVMB/API-GO-CHECKLIST-CONDOMINIO/database"
@@ -10,9 +9,9 @@ import (
 )
 
 func GetAllAdm(c *gin.Context) {
-    var adms []models.Administrador
-    database.DB.Raw("SELECT name, email, cpf from administradors WHERE deleted_at IS NULL").Find(&adms)
-    c.JSON(http.StatusOK, adms)
+	var adms []models.Administrador
+	database.DB.Raw("SELECT DISTINCT name, email, cpf from administradors WHERE deleted_at IS NULL").Find(&adms)
+	c.JSON(http.StatusOK, adms)
 }
 
 // func GetAdmByInativeStatus(c *gin.Context){
@@ -35,24 +34,21 @@ func GetAdmById(c *gin.Context) {
 }
 
 func CreateAdm(c *gin.Context) {
-    var adm models.Administrador
-    if err := c.ShouldBindJSON(&adm); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "erro": err.Error()})
-        return
-    }
-    if err := models.ValidatesDataAdm(&adm); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "erro": err.Error()})
-        return
-    }
+	var adm models.Administrador
+	if err := c.ShouldBindJSON(&adm); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"erro": err.Error()})
+		return
+	}
+	if err := models.ValidatesDataAdm(&adm); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"erro": err.Error()})
+		return
+	}
 
-    fmt.Println("Antes de criar o administrador")
-    database.DB.Create(&adm)
-    fmt.Println("Depois de criar o administrador")
-    c.JSON(http.StatusOK, adm)
+	database.DB.Create(&adm)
+	c.JSON(http.StatusOK, adm)
 }
-
 
 func UpdateAdm(c *gin.Context) {
 	var adm models.Administrador
