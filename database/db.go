@@ -23,4 +23,6 @@ func Connection() {
 	DB.AutoMigrate(&models.Administrador{})
 	DB.AutoMigrate(&models.Sindico{})
 	DB.AutoMigrate(&models.Condominio{})
+	DB.AutoMigrate(&models.Torre{})
 }
+
